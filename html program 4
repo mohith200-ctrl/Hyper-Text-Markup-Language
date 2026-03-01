@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>File Operations in HTML</title>
+</head>
+<body>
+
+<h2>File Operations using HTML & JavaScript</h2>
+
+<!-- Read File -->
+<h3>1. Read File</h3>
+<input type="file" id="fileInput">
+<br><br>
+<textarea id="fileContent" rows="10" cols="50" placeholder="File content will appear here..."></textarea>
+
+<br><br>
+
+<!-- Write / Append -->
+<h3>2. Write / Append Content</h3>
+<textarea id="writeContent" rows="5" cols="50" placeholder="Enter text to write..."></textarea>
+<br><br>
+<button onclick="createFile()">Create File</button>
+<button onclick="appendContent()">Append Content</button>
+<button onclick="clearContent()">Clear Text Area</button>
+
+<script>
+// Read File
+document.getElementById("fileInput").addEventListener("change", function(event) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = function(e) {
+        document.getElementById("fileContent").value = e.target.result;
+    };
+
+    reader.readAsText(file);
+});
+
+// Create / Write File
+function createFile() {
+    const content = document.getElementById("writeContent").value;
+    const blob = new Blob([content], { type: "text/plain" });
+    const link = document.createElement("a");
+
+    link.href = URL.createObjectURL(blob);
+    link.download = "output.txt";
+    link.click();
+}
+
+// Append Content
+function appendContent() {
+    const current = document.getElementById("fileContent").value;
+    const newText = document.getElementById("writeContent").value;
+    document.getElementById("fileContent").value = current + "\n" + newText;
+}
+
+// Clear Text Area
+function clearContent() {
+    document.getElementById("writeContent").value = "";
+}
+</script>
+
+</body>
+</html>
