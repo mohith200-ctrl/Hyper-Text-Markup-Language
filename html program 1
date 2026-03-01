@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html ng-app="jobApp">
+<head>
+    <title>Job Registration Form</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <style>
+        body {
+            font-family: Arial;
+            background-color: #f2f2f2;
+        }
+        .container {
+            width: 400px;
+            margin: 50px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px gray;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0 10px 0;
+        }
+        .error {
+            color: red;
+            font-size: 13px;
+        }
+        button {
+            padding: 10px;
+            width: 100%;
+            background: green;
+            color: white;
+            border: none;
+        }
+        button:disabled {
+            background: gray;
+        }
+    </style>
+</head>
+
+<body ng-controller="jobController">
+
+<div class="container">
+    <h2>Job Registration Form</h2>
+
+    <form name="jobForm" novalidate>
+
+        <!-- Full Name -->
+        <label>Full Name</label>
+        <input type="text" name="fullname" ng-model="user.fullname" required>
+        <div class="error" ng-show="jobForm.fullname.$touched && jobForm.fullname.$invalid">
+            Name is required.
+        </div>
+
+        <!-- Email -->
+        <label>Email</label>
+        <input type="email" name="email" ng-model="user.email" required>
+        <div class="error" ng-show="jobForm.email.$touched && jobForm.email.$error.required">
+            Email is required.
+        </div>
+        <div class="error" ng-show="jobForm.email.$touched && jobForm.email.$error.email">
+            Invalid email format.
+        </div>
+
+        <!-- Password -->
+        <label>Password</label>
+        <input type="password" name="password" ng-model="user.password" ng-minlength="6" required>
+        <div class="error" ng-show="jobForm.password.$touched && jobForm.password.$error.required">
+            Password is required.
+        </div>
+        <div class="error" ng-show="jobForm.password.$touched && jobForm.password.$error.minlength">
+            Password must be at least 6 characters.
+        </div>
+
+        <!-- Age -->
+        <label>Age</label>
+        <input type="number" name="age" ng-model="user.age" min="18" required>
+        <div class="error" ng-show="jobForm.age.$touched && jobForm.age.$error.required">
+            Age is required.
+        </div>
+        <div class="error" ng-show="jobForm.age.$touched && jobForm.age.$error.min">
+            Minimum age is 18.
+        </div>
+
+        <!-- Mobile -->
+        <label>Mobile Number</label>
+        <input type="text" name="mobile" ng-model="user.mobile" 
+               ng-pattern="/^[0-9]{10}$/" required>
+        <div class="error" ng-show="jobForm.mobile.$touched && jobForm.mobile.$error.required">
+            Mobile number is required.
+        </div>
+        <div class="error" ng-show="jobForm.mobile.$touched && jobForm.mobile.$error.pattern">
+            Enter valid 10-digit mobile number.
+        </div>
+
+        <!-- Gender -->
+        <label>Gender</label>
+        <select name="gender" ng-model="user.gender" required>
+            <option value="">Select Gender</option>
+            <option>Male</option>
+            <option>Female</option>
+            <option>Other</option>
+        </select>
+        <div class="error" ng-show="jobForm.gender.$touched && jobForm.gender.$invalid">
+            Please select gender.
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" ng-disabled="jobForm.$invalid" ng-click="submitForm()">
+            Register
+        </button>
+
+    </form>
+</div>
+
+<script>
+    var app = angular.module("jobApp", []);
+
+    app.controller("jobController", function($scope) {
+        $scope.submitForm = function() {
+            if ($scope.jobForm.$valid) {
+                alert("Registration Successful!");
+            }
+        };
+    });
+</script>
+
+</body>
+</html>
