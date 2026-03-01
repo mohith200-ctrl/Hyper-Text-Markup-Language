@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html ng-app="studentApp">
+<head>
+    <title>Student Management</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+<body ng-controller="StudentController">
+
+<h2>Student Management System</h2>
+
+<form ng-submit="addStudent()">
+    <input type="text" ng-model="student.name" placeholder="Name" required>
+    <input type="text" ng-model="student.rollNumber" placeholder="Roll Number" required>
+    <input type="text" ng-model="student.department" placeholder="Department" required>
+    <input type="number" ng-model="student.year" placeholder="Year" required>
+    <button type="submit">Add Student</button>
+</form>
+
+<hr>
+
+<table border="1">
+    <tr>
+        <th>Name</th>
+        <th>Roll No</th>
+        <th>Department</th>
+        <th>Year</th>
+        <th>Actions</th>
+    </tr>
+    <tr ng-repeat="s in students">
+        <td>{{s.name}}</td>
+        <td>{{s.rollNumber}}</td>
+        <td>{{s.department}}</td>
+        <td>{{s.year}}</td>
+        <td>
+            <button ng-click="deleteStudent(s._id)">Delete</button>
+        </td>
+    </tr>
+</table>
+
+<script>
+angular.module("studentApp", [])
+.controller("StudentController", function($scope, $http) {
+
+    const API_URL = "http://localhost:5000/students";
+
+    // Fetch students
+    function loadStudents() {
+        $http.get(API_URL).then(function(response) {
+            $scope.students = response.data;
+        });
+    }
+
+    loadStudents();
+
+    // Add student
+    $scope.addStudent = function() {
+        $http.post(API_URL, $scope.student)
+        .then(function() {
+            $scope.student = {};
+            loadStudents();
+        });
+    };
+
+    // Delete student
+    $scope.deleteStudent = function(id) {
+        $http.delete(API_URL + "/" + id)
+        .then(function() {
+            loadStudents();
+        });
+    };
+});
+</script>
+
+</body>
+</html>
